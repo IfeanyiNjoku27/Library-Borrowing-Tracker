@@ -4,3 +4,56 @@ GET {{Library_Borrowing_Tracker_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+### Get all books
+GET {{Library_Borrowing_Tracker_HostAddress}}/api/Books
+Accept: application/json
+
+###
+
+### Get book by id
+GET {{Library_Borrowing_Tracker_HostAddress}}/api/Books/1
+Accept: application/json
+
+###
+
+### Create a book
+POST {{Library_Borrowing_Tracker_HostAddress}}/api/Books
+Content-Type: application/json
+
+{
+  "title": "Clean Code",
+  "author": "Robert C. Martin",
+  "category": "Software Engineering",
+  "isAvailable": true
+}
+
+###
+
+### Update a book (PUT)
+PUT {{Library_Borrowing_Tracker_HostAddress}}/api/Books/1
+Content-Type: application/json
+
+{
+  "title": "Clean Code (2nd Edition)",
+  "author": "Robert C. Martin",
+  "category": "Software Engineering",
+  "isAvailable": false
+}
+
+###
+
+### Partially update a book (PATCH)
+PATCH {{Library_Borrowing_Tracker_HostAddress}}/api/Books/1
+Content-Type: application/json-patch+json
+
+[
+  { "op": "replace", "path": "/isAvailable", "value": true }
+]
+
+###
+
+### Delete a book
+DELETE {{Library_Borrowing_Tracker_HostAddress}}/api/Books/1
+
+###
