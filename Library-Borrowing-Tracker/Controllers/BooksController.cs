@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Library_Borrowing_Tracker.DTO;
+using Library_Borrowing_Tracker.DTO.BookDTO;
 using Library_Borrowing_Tracker.Models;
 using Library_Borrowing_Tracker.Repository;
 using Microsoft.AspNetCore.JsonPatch;

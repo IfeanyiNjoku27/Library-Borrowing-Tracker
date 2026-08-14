@@ -1,24 +1,21 @@
-@Library_Borrowing_Tracker_HostAddress = http://localhost:5089
-
-GET {{Library_Borrowing_Tracker_HostAddress}}/weatherforecast/
-Accept: application/json
+@HostAddress = http://localhost:5089
 
 ###
 
 ### Get all books
-GET {{Library_Borrowing_Tracker_HostAddress}}/api/Books
+GET {{HostAddress}}/api/Books
 Accept: application/json
 
 ###
 
 ### Get book by id
-GET {{Library_Borrowing_Tracker_HostAddress}}/api/Books/1
+GET {{HostAddress}}/api/Books/1
 Accept: application/json
 
 ###
 
 ### Create a book
-POST {{Library_Borrowing_Tracker_HostAddress}}/api/Books
+POST {{HostAddress}}/api/Books
 Content-Type: application/json
 
 {
@@ -31,7 +28,7 @@ Content-Type: application/json
 ###
 
 ### Update a book (PUT)
-PUT {{Library_Borrowing_Tracker_HostAddress}}/api/Books/1
+PUT {{HostAddress}}/api/Books/1
 Content-Type: application/json
 
 {
@@ -44,7 +41,7 @@ Content-Type: application/json
 ###
 
 ### Partially update a book (PATCH)
-PATCH {{Library_Borrowing_Tracker_HostAddress}}/api/Books/1
+PATCH {{HostAddress}}/api/Books/1
 Content-Type: application/json-patch+json
 
 [
@@ -54,6 +51,55 @@ Content-Type: application/json-patch+json
 ###
 
 ### Delete a book
-DELETE {{Library_Borrowing_Tracker_HostAddress}}/api/Books/1
+DELETE {{HostAddress}}/api/Books/1
 
-###
+###--- Loans Endpoint ---###
+
+### 1. Get all loans
+GET {{HostAddress}}/api/Loans
+Accept: application/json
+
+### 2. Get loan by id 
+GET {{HostAddress}}/api/Loans/1
+Accept: application/json
+
+### 3. POST (Create) a New Loan
+# Note: Id is omitted because the database auto-generates it. ReturnDate is omitted because the book is freshly borrowed.
+POST {{HostAddress}}/api/Loans
+Content-Type: application/json
+
+{
+  "bookId": 1,
+  "memberId": 1,
+  "borrowDate": "2026-08-13T00:00:00Z",
+  "status": "Active"
+}
+
+### 4. PUT (Replace) a Loan
+# Note: PUT requires the entire object to be sent to replace the existing record.
+PUT {{HostAddress}}/api/Loans/1
+Content-Type: application/json
+
+{
+  "bookId": 1,
+  "memberId": 1,
+  "borrowDate": "2026-08-13T00:00:00Z",
+  "returnDate": "2026-08-20T00:00:00Z",
+  "status": "Returned"
+}
+
+### 5. PATCH (Partial Update) a Loan
+# Note: This uses JSON Patch syntax to update only specific fields (e.g., updating just the status).
+PATCH {{HostAddress}}/api/Loans/1
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "replace",
+    "path": "/status",
+    "value": "Overdue"
+  }
+]
+
+### 6. DELETE a Loan
+DELETE {{HostAddress}}/api/Loans/1

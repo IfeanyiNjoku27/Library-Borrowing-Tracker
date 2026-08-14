@@ -1,4 +1,4 @@
-﻿namespace Library_Borrowing_Tracker.DTO
+﻿namespace Library_Borrowing_Tracker.DTO.BookDTO
 {
     public class BookUpdateDto
     {

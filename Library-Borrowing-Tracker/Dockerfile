@@ -27,4 +27,11 @@ RUN dotnet publish "./Library-Borrowing-Tracker.csproj" -c $BUILD_CONFIGURATION 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# -- giving app user ownership of the app directory during the build process --
+USER root
+RUN chown -R app:app /app
+USER app
+
+
 ENTRYPOINT ["dotnet", "Library-Borrowing-Tracker.dll"]

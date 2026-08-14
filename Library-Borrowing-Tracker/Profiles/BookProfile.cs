@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Library_Borrowing_Tracker.Models;
-using Library_Borrowing_Tracker.DTO;
+using Library_Borrowing_Tracker.DTO.BookDTO;
 
 namespace Library_Borrowing_Tracker.Profile
 {
