@@ -1,0 +1,107 @@
+@model LoansPageViewModel
+@{
+    ViewData["Title"] = "Loans";
+}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">BORROWING RECORDS</p>
+        <h1>Manage loans</h1>
+        <p>Connect books and members through complete loan lifecycle operations.</p>
+    </div>
+    <span class="action-count">6 actions</span>
+</section>
+
+@if (!string.IsNullOrWhiteSpace(Model.LoadError))
+{
+    <div class="status status-error" role="alert">@Model.LoadError</div>
+}
+
+<section class="lookup-panel">
+    <form method="get" asp-action="Index" class="inline-form">
+        <label for="loan-lookup">Retrieve one loan by ID</label>
+        <input id="loan-lookup" name="lookupId" type="number" min="1" value="@Model.LookupId" placeholder="Loan ID" />
+        <button type="submit" class="button secondary">GET by ID</button>
+    </form>
+    @if (Model.Selected is not null)
+    {
+        <div class="selected-record">
+            <strong>#@Model.Selected.Id · Book @Model.Selected.BookId → Member @Model.Selected.MemberId</strong>
+            <span>@Model.Selected.Status · Borrowed @Model.Selected.BorrowDate.ToString("yyyy-MM-dd") · Returned @(Model.Selected.ReturnDate?.ToString("yyyy-MM-dd") ?? "—")</span>
+        </div>
+    }
+</section>
+
+<section class="data-section">
+    <div class="section-title"><h2>GET all</h2><span>@Model.Items.Count record(s)</span></div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>ID</th><th>Book</th><th>Member</th><th>Borrowed</th><th>Returned</th><th>Status</th></tr></thead>
+            <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr><td colspan="6" class="empty">No loan records returned.</td></tr>
+            }
+            else
+            {
+                @foreach (var loan in Model.Items)
+                {
+                    <tr>
+                        <td>@loan.Id</td><td>@loan.BookId</td><td>@loan.MemberId</td>
+                        <td>@loan.BorrowDate.ToString("yyyy-MM-dd")</td><td>@(loan.ReturnDate?.ToString("yyyy-MM-dd") ?? "—")</td><td>@loan.Status</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="operation-grid">
+    <article class="operation-card">
+        <p class="method">POST</p><h2>Create a loan</h2>
+        <form asp-action="Create" method="post" class="stack-form">
+            <label asp-for="Create.BookId">Book ID</label><input asp-for="Create.BookId" min="1" />
+            <label asp-for="Create.MemberId">Member ID</label><input asp-for="Create.MemberId" min="1" />
+            <label asp-for="Create.BorrowDate">Borrow date</label><input asp-for="Create.BorrowDate" type="datetime-local" />
+            <label asp-for="Create.Status"></label><input asp-for="Create.Status" />
+            <button type="submit" class="button">Create</button>
+        </form>
+    </article>
+
+    <article class="operation-card">
+        <p class="method">PUT</p><h2>Replace a loan</h2>
+        <form asp-action="Update" method="post" class="stack-form">
+            <label asp-for="Update.Id">Loan ID</label><input asp-for="Update.Id" min="1" />
+            <label asp-for="Update.BookId">Book ID</label><input asp-for="Update.BookId" min="1" />
+            <label asp-for="Update.MemberId">Member ID</label><input asp-for="Update.MemberId" min="1" />
+            <label asp-for="Update.BorrowDate">Borrow date</label><input asp-for="Update.BorrowDate" type="datetime-local" />
+            <label asp-for="Update.ReturnDate">Return date</label><input asp-for="Update.ReturnDate" type="datetime-local" />
+            <label asp-for="Update.Status"></label><input asp-for="Update.Status" />
+            <button type="submit" class="button">Replace</button>
+        </form>
+    </article>
+
+    <article class="operation-card">
+        <p class="method">PATCH</p><h2>Change one field</h2>
+        <form asp-action="Patch" method="post" class="stack-form">
+            <label asp-for="Patch.Id">Loan ID</label><input asp-for="Patch.Id" min="1" />
+            <label asp-for="Patch.Path">Field</label>
+            <select asp-for="Patch.Path">
+                <option value="/bookId">Book ID</option><option value="/memberId">Member ID</option>
+                <option value="/borrowDate">Borrow date</option><option value="/returnDate">Return date</option><option value="/status">Status</option>
+            </select>
+            <label asp-for="Patch.Value"></label><input asp-for="Patch.Value" placeholder="Use ISO date format for dates" />
+            <button type="submit" class="button">Apply patch</button>
+        </form>
+    </article>
+
+    <article class="operation-card danger-card">
+        <p class="method danger">DELETE</p><h2>Delete a loan</h2>
+        <form asp-action="Delete" method="post" class="stack-form">
+            <label for="delete-loan-id">Loan ID</label><input id="delete-loan-id" name="id" type="number" min="1" required />
+            <p class="form-note">Delete only test or invalid loan records according to the project policy.</p>
+            <button type="submit" class="button danger-button">Delete</button>
+        </form>
+    </article>
+</section>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] · Library Borrowing Tracker</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" asp-controller="Books" asp-action="Index">
+            <span class="brand-mark" aria-hidden="true">L</span>
+            <span>Library Borrowing Tracker</span>
+        </a>
+        <nav aria-label="Primary navigation">
+            <a asp-controller="Books" asp-action="Index">Books</a>
+            <a asp-controller="Members" asp-action="Index">Members</a>
+            <a asp-controller="Loans" asp-action="Index">Loans</a>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        @if (TempData["StatusMessage"] is string statusMessage)
+        {
+            var kind = TempData["StatusKind"] as string ?? "info";
+            <div class="status status-@kind" role="status">@statusMessage</div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        HttpClient web client · Books, Members, and Loans · 18 API actions
+    </footer>
+</body>
+</html>

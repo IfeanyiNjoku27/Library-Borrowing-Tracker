@@ -1,0 +1,100 @@
+@model MembersPageViewModel
+@{
+    ViewData["Title"] = "Members";
+}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">MEMBER DIRECTORY</p>
+        <h1>Manage members</h1>
+        <p>Run all six member actions while keeping the API as the source of truth.</p>
+    </div>
+    <span class="action-count">6 actions</span>
+</section>
+
+@if (!string.IsNullOrWhiteSpace(Model.LoadError))
+{
+    <div class="status status-error" role="alert">@Model.LoadError</div>
+}
+
+<section class="lookup-panel">
+    <form method="get" asp-action="Index" class="inline-form">
+        <label for="member-lookup">Retrieve one member by ID</label>
+        <input id="member-lookup" name="lookupId" type="number" min="1" value="@Model.LookupId" placeholder="Member ID" />
+        <button type="submit" class="button secondary">GET by ID</button>
+    </form>
+    @if (Model.Selected is not null)
+    {
+        <div class="selected-record">
+            <strong>#@Model.Selected.Id · @Model.Selected.FullName</strong>
+            <span>@Model.Selected.Email · @Model.Selected.PhoneNumber</span>
+        </div>
+    }
+</section>
+
+<section class="data-section">
+    <div class="section-title"><h2>GET all</h2><span>@Model.Items.Count record(s)</span></div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>ID</th><th>Full name</th><th>Email</th><th>Phone</th></tr></thead>
+            <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr><td colspan="4" class="empty">No member records returned.</td></tr>
+            }
+            else
+            {
+                @foreach (var member in Model.Items)
+                {
+                    <tr><td>@member.Id</td><td>@member.FullName</td><td>@member.Email</td><td>@member.PhoneNumber</td></tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="operation-grid">
+    <article class="operation-card">
+        <p class="method">POST</p><h2>Create a member</h2>
+        <form asp-action="Create" method="post" class="stack-form">
+            <label asp-for="Create.FullName"></label><input asp-for="Create.FullName" />
+            <label asp-for="Create.Email"></label><input asp-for="Create.Email" type="email" />
+            <label asp-for="Create.PhoneNumber">Phone number</label><input asp-for="Create.PhoneNumber" type="tel" />
+            <button type="submit" class="button">Create</button>
+        </form>
+    </article>
+
+    <article class="operation-card">
+        <p class="method">PUT</p><h2>Replace a member</h2>
+        <form asp-action="Update" method="post" class="stack-form">
+            <label asp-for="Update.Id">Member ID</label><input asp-for="Update.Id" min="1" />
+            <label asp-for="Update.FullName"></label><input asp-for="Update.FullName" />
+            <label asp-for="Update.Email"></label><input asp-for="Update.Email" type="email" />
+            <label asp-for="Update.PhoneNumber">Phone number</label><input asp-for="Update.PhoneNumber" type="tel" />
+            <button type="submit" class="button">Replace</button>
+        </form>
+    </article>
+
+    <article class="operation-card">
+        <p class="method">PATCH</p><h2>Change one field</h2>
+        <form asp-action="Patch" method="post" class="stack-form">
+            <label asp-for="Patch.Id">Member ID</label><input asp-for="Patch.Id" min="1" />
+            <label asp-for="Patch.Path">Field</label>
+            <select asp-for="Patch.Path">
+                <option value="/fullName">Full name</option><option value="/email">Email</option><option value="/phoneNumber">Phone number</option>
+            </select>
+            <label asp-for="Patch.Value"></label><input asp-for="Patch.Value" />
+            <button type="submit" class="button">Apply patch</button>
+        </form>
+    </article>
+
+    <article class="operation-card danger-card">
+        <p class="method danger">DELETE</p><h2>Delete a member</h2>
+        <form asp-action="Delete" method="post" class="stack-form">
+            <label for="delete-member-id">Member ID</label><input id="delete-member-id" name="id" type="number" min="1" required />
+            <p class="form-note">Check for active borrowing records before deleting a member.</p>
+            <button type="submit" class="button danger-button">Delete</button>
+        </form>
+    </article>
+</section>
