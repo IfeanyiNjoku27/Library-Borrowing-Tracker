@@ -1,0 +1,109 @@
+@model BooksPageViewModel
+@{
+    ViewData["Title"] = "Books";
+}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">BOOK CATALOG</p>
+        <h1>Manage books</h1>
+        <p>List, retrieve, create, replace, patch, and delete book records through the API.</p>
+    </div>
+    <span class="action-count">6 actions</span>
+</section>
+
+@if (!string.IsNullOrWhiteSpace(Model.LoadError))
+{
+    <div class="status status-error" role="alert">@Model.LoadError</div>
+}
+
+<section class="lookup-panel">
+    <form method="get" asp-action="Index" class="inline-form">
+        <label for="book-lookup">Retrieve one book by ID</label>
+        <input id="book-lookup" name="lookupId" type="number" min="1" value="@Model.LookupId" placeholder="Book ID" />
+        <button type="submit" class="button secondary">GET by ID</button>
+    </form>
+    @if (Model.Selected is not null)
+    {
+        <div class="selected-record">
+            <strong>#@Model.Selected.Id · @Model.Selected.Title</strong>
+            <span>@Model.Selected.Author · @Model.Selected.Category · @(Model.Selected.IsAvailable ? "Available" : "Unavailable")</span>
+        </div>
+    }
+</section>
+
+<section class="data-section">
+    <div class="section-title">
+        <h2>GET all</h2>
+        <span>@Model.Items.Count record(s)</span>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>ID</th><th>Title</th><th>Author</th><th>Category</th><th>Available</th></tr></thead>
+            <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr><td colspan="5" class="empty">No book records returned.</td></tr>
+            }
+            else
+            {
+                @foreach (var book in Model.Items)
+                {
+                    <tr>
+                        <td>@book.Id</td><td>@book.Title</td><td>@book.Author</td><td>@book.Category</td>
+                        <td><span class="state @(book.IsAvailable ? "state-good" : "state-muted")">@(book.IsAvailable ? "Yes" : "No")</span></td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="operation-grid">
+    <article class="operation-card">
+        <p class="method">POST</p><h2>Create a book</h2>
+        <form asp-action="Create" method="post" class="stack-form">
+            <label asp-for="Create.Title"></label><input asp-for="Create.Title" />
+            <label asp-for="Create.Author"></label><input asp-for="Create.Author" />
+            <label asp-for="Create.Category"></label><input asp-for="Create.Category" />
+            <label class="check"><input asp-for="Create.IsAvailable" /> Available</label>
+            <button type="submit" class="button">Create</button>
+        </form>
+    </article>
+
+    <article class="operation-card">
+        <p class="method">PUT</p><h2>Replace a book</h2>
+        <form asp-action="Update" method="post" class="stack-form">
+            <label asp-for="Update.Id">Book ID</label><input asp-for="Update.Id" min="1" />
+            <label asp-for="Update.Title"></label><input asp-for="Update.Title" />
+            <label asp-for="Update.Author"></label><input asp-for="Update.Author" />
+            <label asp-for="Update.Category"></label><input asp-for="Update.Category" />
+            <label class="check"><input asp-for="Update.IsAvailable" /> Available</label>
+            <button type="submit" class="button">Replace</button>
+        </form>
+    </article>
+
+    <article class="operation-card">
+        <p class="method">PATCH</p><h2>Change one field</h2>
+        <form asp-action="Patch" method="post" class="stack-form">
+            <label asp-for="Patch.Id">Book ID</label><input asp-for="Patch.Id" min="1" />
+            <label asp-for="Patch.Path">Field</label>
+            <select asp-for="Patch.Path">
+                <option value="/title">Title</option><option value="/author">Author</option>
+                <option value="/category">Category</option><option value="/isAvailable">Available (true/false)</option>
+            </select>
+            <label asp-for="Patch.Value"></label><input asp-for="Patch.Value" />
+            <button type="submit" class="button">Apply patch</button>
+        </form>
+    </article>
+
+    <article class="operation-card danger-card">
+        <p class="method danger">DELETE</p><h2>Delete a book</h2>
+        <form asp-action="Delete" method="post" class="stack-form">
+            <label for="delete-book-id">Book ID</label><input id="delete-book-id" name="id" type="number" min="1" required />
+            <p class="form-note">Deletion is permanent. Confirm the record is not needed by an active loan.</p>
+            <button type="submit" class="button danger-button">Delete</button>
+        </form>
+    </article>
+</section>

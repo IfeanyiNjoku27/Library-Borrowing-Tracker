@@ -1,3 +1,5 @@
 <Solution>
   <Project Path="Library-Borrowing-Tracker/Library-Borrowing-Tracker.csproj" />
+  <Project Path="Library-Borrowing-Tracker.Client/Library-Borrowing-Tracker.Client.csproj" />
+  <Project Path="Library-Borrowing-Tracker.Client.Tests/Library-Borrowing-Tracker.Client.Tests.csproj" />
 </Solution>

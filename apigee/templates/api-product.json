@@ -1,0 +1,30 @@
+{
+  "name": "library-borrowing-tracker",
+  "displayName": "Library Borrowing Tracker",
+  "description": "Approved access to the Library Borrowing Tracker proxy.",
+  "approvalType": "auto",
+  "attributes": [
+    {
+      "name": "access",
+      "value": "public"
+    }
+  ],
+  "environments": [
+    "YOUR_ENVIRONMENT"
+  ],
+  "proxies": [
+    "YOUR_PROXY_NAME"
+  ],
+  "apiResources": [
+    "/api/books",
+    "/api/books/**",
+    "/api/members",
+    "/api/members/**",
+    "/api/loans",
+    "/api/loans/**"
+  ],
+  "quota": "1000",
+  "quotaInterval": "1",
+  "quotaTimeUnit": "month"
+}
+

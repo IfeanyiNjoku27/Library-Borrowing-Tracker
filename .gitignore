@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Local-only Member 4 configuration and private evidence
+appsettings.*.local.json
+docs/member4/screenshots/private/
